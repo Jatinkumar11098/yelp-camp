@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const mongoose = require('mongoose');
+const campground = require('./models/campgrounds')
 
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
@@ -18,7 +19,7 @@ async function main() {
 // routes 
 // show route 
 app.get('/campgrounds', (req, res) => {
-    res.send('This will be the show route!!');
+    res.render('home');
 })
 
 app.listen(3000, () => {
