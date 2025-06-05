@@ -3,6 +3,9 @@ const app = express();
 const path = require('path');
 const mongoose = require('mongoose');
 
+app.set('view engine', 'ejs')
+app.set('views', path.join(__dirname, 'views'))
+
 // mongoose connection
 main().catch(err => console.log(err));
 async function main() {
