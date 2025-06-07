@@ -18,8 +18,9 @@ async function main() {
 
 // routes 
 // show route 
-app.get('/campgrounds', (req, res) => {
-    res.render('home');
+app.get('/campgrounds', async(req, res) => {
+    const campgrounds = await campground.find({});
+    res.render('./campgrounds/home', {campgrounds});
 })
 
 app.listen(3000, () => {

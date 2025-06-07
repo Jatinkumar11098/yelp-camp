@@ -9,6 +9,11 @@
 
 <body>
     <h1>All Campgrounds</h1>
+    <ul>
+    <%for(let camp of campgrounds){  %>
+            <li><%=camp.title%></li>
+        <% } %>
+    </ul>
 </body>
 
 </html>
