@@ -17,11 +17,18 @@ async function main() {
 
 
 // routes 
-// show route 
+// index route 
 app.get('/campgrounds', async(req, res) => {
     const campgrounds = await campground.find({});
     res.render('./campgrounds/home', {campgrounds});
 })
+// show route
+app.get('/campgrounds/:id', async(req, res) => {
+    const{id} = await req.params;
+    const foundCamp = await campground.findById(id)
+    res.render('./campgrounds/show', {camp:foundCamp});
+})
+
 
 app.listen(3000, () => {
     console.log('listening to port 3000!!');
