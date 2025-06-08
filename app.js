@@ -7,6 +7,8 @@ const campground = require('./models/campground')
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
 
+app.use(express.urlencoded({ extended: true }));
+
 // mongoose connection
 main().catch(err => console.log(err));
 async function main() {
@@ -22,6 +24,19 @@ app.get('/campgrounds', async(req, res) => {
     const campgrounds = await campground.find({});
     res.render('./campgrounds/home', {campgrounds});
 })
+
+// create route
+app.get('/campgrounds/new', (req,res)=>{
+    res.render('./campgrounds/new');
+})
+app.post('/campgrounds', async (req,res)=>{
+    const newCamp = req.body.campground;
+    const addedCamp= new campground(newCamp);
+    await addedCamp.save();
+    res.redirect(`/campgrounds/${addedCamp._id}`);
+    
+})
+
 // show route
 app.get('/campgrounds/:id', async(req, res) => {
     const{id} = await req.params;
