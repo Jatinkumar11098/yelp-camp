@@ -23,6 +23,10 @@ async function main() {
 
 
 // routes 
+// home route 
+app.get('/', (req,res)=>{
+    res.send('Home will be soon here!!')
+})
 // index route 
 app.get('/campgrounds', async(req, res) => {
     const campgrounds = await campground.find({});
