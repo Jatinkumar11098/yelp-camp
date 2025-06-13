@@ -69,3 +69,9 @@ app.delete('/campgrounds/:id', async (req,res)=>{
 app.listen(3000, () => {
     console.log('listening to port 3000!!');
 });
+
+
+
+
+
+// copy paste 
