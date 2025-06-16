@@ -2,6 +2,9 @@
     <h1><%=camp.title%></h1>
     <p><%=camp.location %></p>
     <div>
+        <img src="<%=camp.image %>" alt="">
+        <p><%= camp.description %></p>
+        <p><%= camp.price %></p>
         <a href="/campgrounds">all campgrounds</a>
         <a href="/campgrounds/<%=camp._id%>/edit">Edit</a>
         <form action="/campgrounds/<%=camp._id%>?_method=DELETE" method="POST">
