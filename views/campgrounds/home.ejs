@@ -11,6 +11,7 @@
     <%-layout('./layouts/boilerplate') %>
     <h1>All Campgrounds</h1>
     <div><a href="/campgrounds/new">add new campground</a></div>
+    <button>click me</button>
     <ul>
     <%for(let camp of campgrounds){  %>
             <li><a href="/campgrounds/<%=camp._id%>"><%=camp.title%></a></li>
