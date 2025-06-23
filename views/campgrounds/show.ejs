@@ -1,31 +1,19 @@
 <%-layout('./layouts/boilerplate') %>
 
-<div class="card" style="width: 18rem;">
+<div class="row">
+    <div class="col-6 offset-3">
+<div class="card">
   <div class="card-body">
     <h5 class="card-title"><%=camp.title%></h5>
-    <h6 class="card-subtitle mb-2 text-body-secondary">Card subtitle</h6>
-    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card’s content.</p>
-    <a href="#" class="card-link">Card link</a>
-    <a href="#" class="card-link">Another link</a>
-  </div>
-</div>
-
-
-
-
-
-
-
-
-    <h1><%=camp.title%></h1>
-    <p><%=camp.location %></p>
-    <div>
-        <img src="<%=camp.image %>" alt="">
-        <p><%= camp.description %></p>
-        <p><%= camp.price %></p>
-        <a href="/campgrounds">all campgrounds</a>
-        <a href="/campgrounds/<%=camp._id%>/edit">Edit</a>
-        <form action="/campgrounds/<%=camp._id%>?_method=DELETE" method="POST">
+    <h6 class="card-subtitle mb-2 text-body-secondary"><%=camp.location %></h6>
+    <img src="<%=camp.image %>" class="card-img-top" alt="">
+    <p class="card-text"><%= camp.description %></p>
+    <a href="/campgrounds" class="card-link">All Campgrounds</a>
+    <a href="/campgrounds/<%=camp._id%>/edit" class="card-link">Edit</a>
+    <form action="/campgrounds/<%=camp._id%>?_method=DELETE" method="POST">
             <button>Delete</button>
         </form>
+  </div>
+</div>
     </div>
+</div>
