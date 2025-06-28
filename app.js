@@ -3,6 +3,8 @@ const app = express();
 const path = require('path');
 const mongoose = require('mongoose');
 const campground = require('./models/campground');
+const expressError=require('./utils/expressError');
+const catchAsync=require('./utils/catchAsync');
 const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
 
@@ -37,16 +39,12 @@ app.get('/campgrounds', async(req, res) => {
 app.get('/campgrounds/new', (req,res)=>{
     res.render('./campgrounds/new');
 })
-app.post('/campgrounds', async (req,res,next)=>{
-    try{
+app.post('/campgrounds', catchAsync( async (req,res,next)=>{
     const newCamp = req.body.campground;
     const addedCamp= new campground(newCamp);
     await addedCamp.save();
     res.redirect(`/campgrounds/${addedCamp._id}`);
-    }catch(e){
-        next(e);
-    }
-})
+}))
 
 // show route
 app.get('/campgrounds/:id', async(req, res) => {
@@ -75,6 +73,7 @@ app.delete('/campgrounds/:id', async (req,res)=>{
     res.redirect('/campgrounds');
 })
 
+// error handling middleware
 app.use((err,req,res,next)=>{
     res.send('Oh boy, Error!!!');
 })
