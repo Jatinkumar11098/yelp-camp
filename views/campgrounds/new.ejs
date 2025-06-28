@@ -3,23 +3,38 @@
     <div class="row">
         <h1 class="text-center">Create a new campground!!</h1>
         <div class="col-6 offset-3">
-            <form action="/campgrounds" method="POST">
+            <form action="/campgrounds" method="POST" novalidate class="validate-form">
                 <div class="mb-3">
                     <label class="form-label" for="title">Title</label>
-                    <input type="text" name="campground[title]" id="title" placeholder="title" class="form-control">
+                    <input type="text" name="campground[title]" id="title" placeholder="title" class="form-control"
+                        required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
                 </div>
+
                 <div class="mb-3">
                     <label class="form-label" for="location">Location</label>
                     <input class="form-control" type="text" name="campground[location]" placeholder="location"
-                        id="location">
+                        id="location" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="img">Image URL</label>
-                    <input class="form-control" type="text" name="campground[image]" placeholder="URL" id="image">
+                    <input class="form-control" type="text" name="campground[image]" placeholder="URL" id="image"
+                        required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label for="description" class="form-label">Description</label>
-                    <textarea class="form-control" id="description" rows="3"></textarea>
+                    <textarea class="form-control" id="description" rows="3" required></textarea>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
                 </div>
                 <button class="btn btn-success mb-3">Submit</button>
             </form>
@@ -27,5 +42,3 @@
         </div>
 
     </div>
-
-    
