@@ -42,7 +42,6 @@ app.post('/campgrounds', async (req,res)=>{
     const addedCamp= new campground(newCamp);
     await addedCamp.save();
     res.redirect(`/campgrounds/${addedCamp._id}`);
-    
 })
 
 // show route
@@ -71,6 +70,10 @@ app.delete('/campgrounds/:id', async (req,res)=>{
     const deleteCampground = await campground.findByIdAndDelete(id);
     res.redirect('/campgrounds');
 })
+
+// app.use((req,res,next)=>{
+//     console.log('Oh boy, Error!!!');
+// })
 
 app.listen(3000, () => {
     console.log('listening to port 3000!!');
