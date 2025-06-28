@@ -37,11 +37,15 @@ app.get('/campgrounds', async(req, res) => {
 app.get('/campgrounds/new', (req,res)=>{
     res.render('./campgrounds/new');
 })
-app.post('/campgrounds', async (req,res)=>{
+app.post('/campgrounds', async (req,res,next)=>{
+    try{
     const newCamp = req.body.campground;
     const addedCamp= new campground(newCamp);
     await addedCamp.save();
     res.redirect(`/campgrounds/${addedCamp._id}`);
+    }catch(e){
+        next(e);
+    }
 })
 
 // show route
@@ -71,9 +75,9 @@ app.delete('/campgrounds/:id', async (req,res)=>{
     res.redirect('/campgrounds');
 })
 
-// app.use((req,res,next)=>{
-//     console.log('Oh boy, Error!!!');
-// })
+app.use((err,req,res,next)=>{
+    res.send('Oh boy, Error!!!');
+})
 
 app.listen(3000, () => {
     console.log('listening to port 3000!!');
