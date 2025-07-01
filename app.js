@@ -48,11 +48,11 @@ app.post('/campgrounds', catchAsync(async (req, res, next) => {
 }))
 
 // show route
-app.get('/campgrounds/:id', async (req, res) => {
+app.get('/campgrounds/:id', catchAsync(async (req, res) => {
     const { id } = await req.params;
     const foundCamp = await campground.findById(id)
     res.render('./campgrounds/show', { camp: foundCamp });
-})
+}))
 
 // update route 
 app.get('/campgrounds/:id/edit', async (req, res) => {
