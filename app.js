@@ -55,11 +55,11 @@ app.get('/campgrounds/:id', catchAsync(async (req, res) => {
 }))
 
 // update route 
-app.get('/campgrounds/:id/edit', async (req, res) => {
+app.get('/campgrounds/:id/edit', catchAsync(async (req, res) => {
     const { id } = req.params;
     const editCampground = await campground.findById(id);
     res.render('./campgrounds/edit', { camp: editCampground })
-})
+}))
 
 app.put('/campgrounds/:id', async (req, res) => {
     const { id } = req.params;
