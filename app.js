@@ -9,7 +9,6 @@ const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
 const Joi = require('joi');
 const ExpressError = require('./utils/expressError');
-const { privateDecrypt } = require('crypto');
 
 app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs')
@@ -25,7 +24,22 @@ async function main() {
     console.log('Mongoose connection successfull!!')
 }
 
+// middlewares
 
+const validateCampgrounds = (req, res, next) => {
+    const campgroundSchema = Joi.object({
+        campground: Joi.object({
+            title: Joi.string().required(),
+            price: Joi.number().required().min(0)
+        }).required()
+    })
+    const result = campgroundSchema.validate(req.body);
+    if (result.error) {
+        const message = result.error.details.map(mes => mes.message).join(',');
+        throw new ExpressError(message);
+    }
+    else next();
+}
 
 // routes 
 // home route 
@@ -42,15 +56,7 @@ app.get('/campgrounds', async (req, res) => {
 app.get('/campgrounds/new', (req, res) => {
     res.render('./campgrounds/new');
 })
-app.post('/campgrounds', catchAsync(async (req, res, next) => {
-    const campgroundSchema= Joi.object({
-        campground: Joi.object({
-            title: Joi.string().required(),
-            price: Joi.number().required().min(0)
-        }).required()
-    })
-    const result = campgroundSchema.validate(req.body);
-    console.log(result.error.details);
+app.post('/campgrounds', validateCampgrounds, catchAsync(async (req, res, next) => {
     const addedCamp = new campground(req.body.campground);
     await addedCamp.save();
     res.redirect(`/campgrounds/${addedCamp._id}`);
