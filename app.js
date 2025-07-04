@@ -7,7 +7,9 @@ const expressError = require('./utils/expressError');
 const catchAsync = require('./utils/catchAsync');
 const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
+const Joi = require('joi');
 const ExpressError = require('./utils/expressError');
+const { privateDecrypt } = require('crypto');
 
 app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs')
@@ -41,8 +43,15 @@ app.get('/campgrounds/new', (req, res) => {
     res.render('./campgrounds/new');
 })
 app.post('/campgrounds', catchAsync(async (req, res, next) => {
-    const newCamp = req.body.campground;
-    const addedCamp = new campground(newCamp);
+    const campgroundSchema= Joi.object({
+        campground: Joi.object({
+            title: Joi.string().required(),
+            price: Joi.number().required().min(0)
+        }).required()
+    })
+    const result = campgroundSchema.validate(req.body);
+    console.log(result.error.details);
+    const addedCamp = new campground(req.body.campground);
     await addedCamp.save();
     res.redirect(`/campgrounds/${addedCamp._id}`);
 }))
@@ -61,18 +70,18 @@ app.get('/campgrounds/:id/edit', catchAsync(async (req, res) => {
     res.render('./campgrounds/edit', { camp: editCampground })
 }))
 
-app.put('/campgrounds/:id', async (req, res) => {
+app.put('/campgrounds/:id', catchAsync(async (req, res) => {
     const { id } = req.params;
     const updateCamp = await campground.findByIdAndUpdate(id, { ...req.body.campground });
     res.redirect(`/campgrounds/${updateCamp._id}`);
-})
+}))
 
 // delete route 
-app.delete('/campgrounds/:id', async (req, res) => {
+app.delete('/campgrounds/:id', catchAsync(async (req, res) => {
     const { id } = req.params;
     const deleteCampground = await campground.findByIdAndDelete(id);
     res.redirect('/campgrounds');
-})
+}))
 
 app.all(/(.*)/, (req, res, next) => {
     next(new expressError('Page not found', 404));
@@ -81,8 +90,8 @@ app.all(/(.*)/, (req, res, next) => {
 // error handling middleware
 app.use((err, req, res, next) => {
     const { statusCode = 500 } = err;
-    if(!err.message)err.message='Oh! something went wrong!!!'
-    res.status(statusCode).render('error', {err});
+    if (!err.message) err.message = 'Oh! something went wrong!!!'
+    res.status(statusCode).render('error', { err });
 })
 
 app.listen(3000, () => {
