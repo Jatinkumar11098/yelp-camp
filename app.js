@@ -76,7 +76,7 @@ app.get('/campgrounds/:id/edit', catchAsync(async (req, res) => {
     res.render('./campgrounds/edit', { camp: editCampground })
 }))
 
-app.put('/campgrounds/:id', catchAsync(async (req, res) => {
+app.put('/campgrounds/:id', validateCampgrounds, catchAsync(async (req, res) => {
     const { id } = req.params;
     const updateCamp = await campground.findByIdAndUpdate(id, { ...req.body.campground });
     res.redirect(`/campgrounds/${updateCamp._id}`);
