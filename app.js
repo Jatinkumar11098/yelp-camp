@@ -6,6 +6,7 @@ const campground = require('./models/campground');
 const expressError = require('./utils/expressError');
 const catchAsync = require('./utils/catchAsync');
 const methodOverride = require('method-override');
+const { campgroundSchema } = require('./schemas.js');
 const ejsMate = require('ejs-mate');
 const Joi = require('joi');
 const ExpressError = require('./utils/expressError');
@@ -27,12 +28,6 @@ async function main() {
 // middlewares
 
 const validateCampgrounds = (req, res, next) => {
-    const campgroundSchema = Joi.object({
-        campground: Joi.object({
-            title: Joi.string().required(),
-            price: Joi.number().required().min(0)
-        }).required()
-    })
     const result = campgroundSchema.validate(req.body);
     if (result.error) {
         const message = result.error.details.map(mes => mes.message).join(',');
