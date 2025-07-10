@@ -6,6 +6,7 @@ const campground = require('./models/campground');
 const expressError = require('./utils/expressError');
 const catchAsync = require('./utils/catchAsync');
 const methodOverride = require('method-override');
+const Review = require('./models/review.js')
 const { campgroundSchema } = require('./schemas.js');
 const ejsMate = require('ejs-mate');
 const Joi = require('joi');
@@ -85,8 +86,13 @@ app.delete('/campgrounds/:id', catchAsync(async (req, res) => {
 }))
 
 // review form 
-app.post('/campgrounds/:id/reviews', catchAsync(async(req,res)=>{
-    res.send(req.body.reviews);
+app.post('/campgrounds/:id/reviews', catchAsync(async (req, res) => {
+    const foundCamp = await campground.findById(req.params.id);
+    const review = new Review(req.body.review);
+    foundCamp.reviews.push(review);
+    await review.save();
+    await foundCamp.save();
+    res.redirect(`/campgrounds/${foundCamp._id}`);
 }))
 
 app.all(/(.*)/, (req, res, next) => {
