@@ -7,7 +7,7 @@ const expressError = require('./utils/expressError');
 const catchAsync = require('./utils/catchAsync');
 const methodOverride = require('method-override');
 const Review = require('./models/review.js')
-const { campgroundSchema } = require('./schemas.js');
+const { campgroundSchema, reviewSchema } = require('./schemas.js');
 const ejsMate = require('ejs-mate');
 const Joi = require('joi');
 const ExpressError = require('./utils/expressError');
@@ -32,7 +32,16 @@ const validateCampgrounds = (req, res, next) => {
     const result = campgroundSchema.validate(req.body);
     if (result.error) {
         const message = result.error.details.map(mes => mes.message).join(',');
-        throw new ExpressError(message);
+        throw new ExpressError(message, 400);
+    }
+    else next();
+}
+
+const validateReview = (req, res, next) => {
+    const {error}= reviewSchema.validate(req.body); 
+    if (error) {
+        const message = error.details.map(mes => mes.message).join(',');
+        throw new ExpressError(message, 400);
     }
     else next();
 }
@@ -85,8 +94,8 @@ app.delete('/campgrounds/:id', catchAsync(async (req, res) => {
     res.redirect('/campgrounds');
 }))
 
-// review form 
-app.post('/campgrounds/:id/reviews', catchAsync(async (req, res) => {
+// review create
+app.post('/campgrounds/:id/reviews', validateReview, catchAsync(async (req, res) => {
     const foundCamp = await campground.findById(req.params.id);
     const review = new Review(req.body.review);
     foundCamp.reviews.push(review);
