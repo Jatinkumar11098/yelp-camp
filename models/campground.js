@@ -15,5 +15,7 @@ const campgroundSchema = new Schema({
     ]
 
 });
-
+campgroundSchema.post('findOneAndDelete', async function(){
+    console.log('DELETED!!');
+})
 module.exports = mongoose.model('Campground', campgroundSchema);
