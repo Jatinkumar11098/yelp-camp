@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const path = require('path');
+var flash = require('connect-flash');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const campground = require('./models/campground');
@@ -36,7 +37,13 @@ app.use(session(sessionConfig));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(methodOverride('_method'));
+app.use(flash());
+app.use((req,res,next)=>{
+    res.locals.success=req.flash('success');
+    next();
+})
 
+// router middlewares
 app.use('/campgrounds', campgrounds);
 app.use('/campgrounds/:id/reviews', reviews);
 
