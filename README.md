@@ -1,2 +1,2 @@
 # yelp-camp
-campsite ;project 
+campsite project 
