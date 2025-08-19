@@ -12,9 +12,15 @@ const Review = require('./models/review.js');
 const { reviewSchema } = require('./schemas.js');
 const ejsMate = require('ejs-mate');
 const Joi = require('joi');
+const User = require('./models/user.js');
 const ExpressError = require('./utils/expressError');
-const campgrounds = require('./routes/campgrounds.js');
-const reviews = require('./routes/reviews.js');
+const campgroundRoutes = require('./routes/campgrounds.js');
+const reviewRoutes = require('./routes/reviews.js');
+const userRoutes = require('./routes/user.js');
+const passport = require('passport');
+const localStrategy = require('passport-local');
+
+
 
 
 app.engine('ejs', ejsMate);
@@ -38,17 +44,24 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(methodOverride('_method'));
 app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(new localStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 // providing flash messages to all ejs templates
-app.use((req,res,next)=>{
-    res.locals.success=req.flash('success');
+app.use((req, res, next) => {
+    res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
     next();
 })
 
 // router middlewares
-app.use('/campgrounds', campgrounds);
-app.use('/campgrounds/:id/reviews', reviews);
+app.use('/campgrounds', campgroundRoutes);
+app.use('/', userRoutes);
+app.use('/campgrounds/:id/reviews', reviewRoutes);
 
 // mongoose connection
 main().catch(err => console.log(err));
