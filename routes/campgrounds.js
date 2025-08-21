@@ -5,6 +5,7 @@ const ExpressError = require('../utils/expressError');
 const campground = require('../models/campground');
 const passport = require('passport');
 const { campgroundSchema } = require('../schemas.js');
+const {isLoggedin} = require('../middlewares.js');
 
 
 // middleware
@@ -30,7 +31,7 @@ router.get('/', async (req, res) => {
 })
 
 // create route
-router.get('/new', (req, res) => {
+router.get('/new', isLoggedin, (req, res) => {
     res.render('./campgrounds/new');
 })
 router.post('/', validateCampgrounds, catchAsync(async (req, res, next) => {
