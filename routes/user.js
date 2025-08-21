@@ -17,11 +17,23 @@ router.post('/register', async (req, res) => {
     res.redirect('/campgrounds');
 });
 
+// login routes 
 router.get('/login', (req, res) => {
     res.render('./users/login');
 });
 router.post('/login', passport.authenticate('local', { failureFlash: true, failureRedirect: '/login' }),(req,res)=>{
     req.flash('success', 'Welcome back!!');
+    res.redirect('/campgrounds');
+});
+
+// logout routes 
+router.get('/logout', (req,res, next)=>{
+    req.logout((e)=>{
+        if(e){
+            return next(e);
+        }
+    });
+    req.flash('success', 'Successfully logout')
     res.redirect('/campgrounds');
 })
 
