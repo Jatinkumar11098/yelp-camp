@@ -13,23 +13,26 @@ router.post('/register', async (req, res) => {
     const user = new User({ username, email });
     const registerUser = await User.register(user, password);
     await registerUser.save();
-    req.flash('success', 'Welcome to Yelpcamp');
-    res.redirect('/campgrounds');
+    req.login(registerUser, (err) => {
+        if (err) return next(err);
+        req.flash('success', 'Welcome to Yelpcamp');
+        res.redirect('/campgrounds');
+    })
 });
 
 // login routes 
 router.get('/login', (req, res) => {
     res.render('./users/login');
 });
-router.post('/login', passport.authenticate('local', { failureFlash: true, failureRedirect: '/login' }),(req,res)=>{
+router.post('/login', passport.authenticate('local', { failureFlash: true, failureRedirect: '/login' }), (req, res) => {
     req.flash('success', 'Welcome back!!');
     res.redirect('/campgrounds');
 });
 
 // logout routes 
-router.get('/logout', (req,res, next)=>{
-    req.logout((e)=>{
-        if(e){
+router.get('/logout', (req, res, next) => {
+    req.logout((e) => {
+        if (e) {
             return next(e);
         }
     });
