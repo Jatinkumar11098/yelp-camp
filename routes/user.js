@@ -17,7 +17,7 @@ router.post('/register', catchAsync(async (req, res) => {
         await registerUser.save();
         req.login(registerUser, (err) => {
             if (err) return next(err);
-            req.flash('success', 'Welcome to Yelpcamp');
+            req.flash('success', 'Welcome to Yelpcamp!');
             res.redirect('/campgrounds');
         })
     } catch (e) {
@@ -32,7 +32,7 @@ router.get('/login', (req, res) => {
     res.render('./users/login');
 });
 router.post('/login', passport.authenticate('local', { failureFlash: true, failureRedirect: '/login' }), (req, res) => {
-    req.flash('success', 'Welcome back!!');
+    req.flash('success', 'Welcome back!');
     res.redirect('/campgrounds');
 });
 

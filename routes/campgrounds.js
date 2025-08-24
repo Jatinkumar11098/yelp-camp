@@ -5,7 +5,7 @@ const ExpressError = require('../utils/expressError');
 const campground = require('../models/campground');
 const passport = require('passport');
 const { campgroundSchema } = require('../schemas.js');
-const {isLoggedin} = require('../middlewares.js');
+const { isLoggedin } = require('../middlewares.js');
 
 
 // middleware
@@ -34,7 +34,7 @@ router.get('/', async (req, res) => {
 router.get('/new', isLoggedin, (req, res) => {
     res.render('./campgrounds/new');
 })
-router.post('/', validateCampgrounds, catchAsync(async (req, res, next) => {
+router.post('/', validateCampgrounds, isLoggedin, catchAsync(async (req, res, next) => {
     const addedCamp = new campground(req.body.campground);
     await addedCamp.save();
     req.flash('success', 'campground successfully created!!')
@@ -53,13 +53,13 @@ router.get('/:id', catchAsync(async (req, res) => {
 }))
 
 // update route 
-router.get('/:id/edit', catchAsync(async (req, res) => {
+router.get('/:id/edit', isLoggedin, catchAsync(async (req, res) => {
     const { id } = req.params;
     const editCampground = await campground.findById(id);
     res.render('./campgrounds/edit', { camp: editCampground })
 }))
 
-router.put('/:id', validateCampgrounds, catchAsync(async (req, res) => {
+router.put('/:id', isLoggedin, validateCampgrounds, catchAsync(async (req, res) => {
     const { id } = req.params;
     const updateCamp = await campground.findByIdAndUpdate(id, { ...req.body.campground });
     req.flash('success', 'campground updated successfully!!')
@@ -67,7 +67,7 @@ router.put('/:id', validateCampgrounds, catchAsync(async (req, res) => {
 }))
 
 // delete route 
-router.delete('/:id', catchAsync(async (req, res) => {
+router.delete('/:id', isLoggedin, catchAsync(async (req, res) => {
     const { id } = req.params;
     const deleteCampground = await campground.findByIdAndDelete(id);
     req.flash('success', 'campground deleted successfully!!')
