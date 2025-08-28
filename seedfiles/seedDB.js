@@ -17,13 +17,14 @@ const arrayRand = array => array[Math.floor(Math.random() * array.length)];
 const seedDB = async () => {
     await campground.deleteMany();
     for (let i = 0; i < 50; i++) {
-        const price = Math.floor(Math.random()*30) +10;
+        const price = Math.floor(Math.random() * 30) + 10;
         const random1000 = Math.floor(Math.random() * 1000);
         const camp = new campground({
+            author: '68b0c6b7682cc7302f6eead8',
             location: `${cities[random1000].city} ${cities[random1000].state}`,
             title: `${arrayRand(descriptors)} ${arrayRand(places)}`,
             description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo voluptas dolores, ducimus error dolorem consequatur ex perferendis nesciunt maiores reiciendis quisquam nostrum deserunt fugiat similique voluptate voluptatibus asperiores dignissimos debitis.',
-            image:`https://picsum.photos/400?random=${Math.random()}`,
+            image: `https://picsum.photos/400?random=${Math.random()}`,
             price
         })
         await camp.save()
