@@ -36,6 +36,7 @@ router.get('/new', isLoggedin, (req, res) => {
 })
 router.post('/', validateCampgrounds, isLoggedin, catchAsync(async (req, res, next) => {
     const addedCamp = new campground(req.body.campground);
+    addedCamp.author =req.user._id;
     await addedCamp.save();
     req.flash('success', 'campground successfully created!!')
     res.redirect(`/campgrounds/${addedCamp._id}`);
