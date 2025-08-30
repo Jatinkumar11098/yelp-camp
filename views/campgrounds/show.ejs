@@ -59,7 +59,9 @@
                                 <div class="card-body">
                                     <h5 class="card-title">Rating: <%=review.rating %>
                                     </h5>
-                                    <h6 class="card-subtitle mb-2 text-muted"><%=review.author.username %></h6>
+                                    <h6 class="card-subtitle mb-2 text-muted">
+                                        <%=review.author.username %>
+                                    </h6>
                                     <p class="card-text">Review: <%=review.body %>
                                     </p>
                                     <% if(currentUser && currentUser._id.equals(review.author._id)) {%>

@@ -1,4 +1,5 @@
 const Campground = require('./models/campground');
+const Review = require('./models/review');
 const ExpressError = require('./utils/expressError');
 const { campgroundSchema, reviewSchema } = require('./schemas.js');
 
@@ -23,6 +24,15 @@ module.exports.isAuthor = async (req, res, next) => {
     if (!campground.author._id.equals(req.user._id)) {
         req.flash('error', 'Permission denied!!');
         return res.redirect(`/campgrounds/${campground._id}`);
+    }
+    next();
+}
+module.exports.isAuthorReview = async (req, res, next) => {
+    const { id,reviewId } = req.params;
+    const review = await Review.findById(reviewId);
+    if (!review.author._id.equals(req.user._id)) {
+        req.flash('error', 'Permission denied!!');
+        return res.redirect(`/campgrounds/${id}`);
     }
     next();
 }
