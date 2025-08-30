@@ -1,24 +1,11 @@
 const express = require('express');
 const router = express.Router({ mergeParams: true });
 const catchAsync = require('../utils/catchAsync');
-const ExpressError = require('../utils/expressError');
 const campground = require('../models/campground');
-const { reviewSchema } = require('../schemas.js');
 const Review = require('../models/review.js');
-const { isLoggedin } = require('../middlewares.js')
+const { isLoggedin, validateReview } = require('../middlewares.js');
 
 
-
-// middlewares
-
-const validateReview = (req, res, next) => {
-    const { error } = reviewSchema.validate(req.body);
-    if (error) {
-        const message = error.details.map(mes => mes.message).join(',');
-        throw new ExpressError(message, 400);
-    }
-    else next();
-}
 
 // review create
 router.post('/', isLoggedin, validateReview, catchAsync(async (req, res) => {
