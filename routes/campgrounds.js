@@ -36,7 +36,7 @@ router.get('/new', isLoggedin, (req, res) => {
 })
 router.post('/', validateCampgrounds, isLoggedin, catchAsync(async (req, res, next) => {
     const addedCamp = new campground(req.body.campground);
-    addedCamp.author =req.user._id;
+    addedCamp.author = req.user._id;
     await addedCamp.save();
     req.flash('success', 'campground successfully created!!')
     res.redirect(`/campgrounds/${addedCamp._id}`);
@@ -56,12 +56,22 @@ router.get('/:id', catchAsync(async (req, res) => {
 // update route 
 router.get('/:id/edit', isLoggedin, catchAsync(async (req, res) => {
     const { id } = req.params;
+    const foundCamp = await campground.findById(id);
+    if (!foundCamp.author._id.equals(req.user._id)) {
+        req.flash('error', 'Permission denied!!');
+        return res.redirect(`/campgrounds/${foundCamp._id}`);
+    }
     const editCampground = await campground.findById(id);
     res.render('./campgrounds/edit', { camp: editCampground })
 }))
 
 router.put('/:id', isLoggedin, validateCampgrounds, catchAsync(async (req, res) => {
     const { id } = req.params;
+    const foundCamp = await campground.findById(id);
+    if (!foundCamp.author._id.equals(req.user._id)) {
+        req.flash('error', 'Permission denied!!');
+        return res.redirect(`/campgrounds/${foundCamp._id}`);
+    }
     const updateCamp = await campground.findByIdAndUpdate(id, { ...req.body.campground });
     req.flash('success', 'campground updated successfully!!')
     res.redirect(`/campgrounds/${updateCamp._id}`);
