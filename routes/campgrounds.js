@@ -28,4 +28,5 @@ router.put('/:id', isLoggedin, isAuthor, validateCampgrounds, catchAsync(campgro
 
 // delete route 
 router.delete('/:id', isLoggedin, catchAsync(campgrounds.delete));
+
 module.exports = router;
