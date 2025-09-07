@@ -12,21 +12,21 @@ const { isLoggedin, isAuthor, validateCampgrounds } = require('../middlewares.js
 //     res.send('Home will be soon here!!')
 // })
 // index route 
-router.get('/', catchAsync(campgrounds.index));
+router.route('/')
+.get(catchAsync(campgrounds.index))
+.post(validateCampgrounds, isLoggedin, catchAsync(campgrounds.create));
 
 // create route
 router.get('/new', isLoggedin, campgrounds.newCreateForm);
-router.post('/', validateCampgrounds, isLoggedin, catchAsync(campgrounds.create));
 
 // show route
-router.get('/:id', catchAsync(campgrounds.show));
+router.route('/:id')
+.get(catchAsync(campgrounds.show))
+.put(isLoggedin, isAuthor, validateCampgrounds, catchAsync(campgrounds.update))
+.delete(isLoggedin, catchAsync(campgrounds.delete));
+
 
 // update route 
 router.get('/:id/edit', isLoggedin, isAuthor, catchAsync(campgrounds.newEditForm));
-
-router.put('/:id', isLoggedin, isAuthor, validateCampgrounds, catchAsync(campgrounds.update));
-
-// delete route 
-router.delete('/:id', isLoggedin, catchAsync(campgrounds.delete));
 
 module.exports = router;
