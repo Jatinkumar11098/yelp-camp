@@ -4,6 +4,8 @@ const catchAsync = require('../utils/catchAsync');
 const Campground = require('../models/campground');
 const campgrounds = require('../controllers/campgrounds.js');
 const { isLoggedin, isAuthor, validateCampgrounds } = require('../middlewares.js');
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' })
 
 
 // routes 
@@ -13,17 +15,20 @@ const { isLoggedin, isAuthor, validateCampgrounds } = require('../middlewares.js
 // })
 // index route 
 router.route('/')
-.get(catchAsync(campgrounds.index))
-.post(validateCampgrounds, isLoggedin, catchAsync(campgrounds.create));
+    .get(catchAsync(campgrounds.index))
+    // .post(validateCampgrounds, isLoggedin, catchAsync(campgrounds.create));
+    .post(upload.array('image'),(req,res)=>{
+        console.log(req.body, req.files);
+    })
 
 // create route
 router.get('/new', isLoggedin, campgrounds.newCreateForm);
 
 // show route
 router.route('/:id')
-.get(catchAsync(campgrounds.show))
-.put(isLoggedin, isAuthor, validateCampgrounds, catchAsync(campgrounds.update))
-.delete(isLoggedin, catchAsync(campgrounds.delete));
+    .get(catchAsync(campgrounds.show))
+    .put(isLoggedin, isAuthor, validateCampgrounds, catchAsync(campgrounds.update))
+    .delete(isLoggedin, catchAsync(campgrounds.delete));
 
 
 // update route 
