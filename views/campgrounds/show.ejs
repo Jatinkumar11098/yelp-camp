@@ -4,34 +4,37 @@
     <div class="row">
         <div class="col-6">
             <div class="card">
-                <img src="<%=camp.image %>" class="card-img-top" alt="">
-                <div class="card-body">
-                    <h5 class="card-title">
-                        <%=camp.title%>
-                    </h5>
-                    <p class="card-text">
-                        <%= camp.description %>
-                    </p>
-                </div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">
-                        <%=camp.location %>
-                    </li>
-                    <li class="list-group-item">
-                        $<%=camp.price %>/night
-                    </li>
-                    <li class="list-group-item">
-                        Created by - <%=camp.author.username %>
-                    </li>
-                </ul>
-                <% if(currentUser && currentUser._id.equals(camp.author._id)){ %>
-                    <div class="card-body">
-                        <a href="/campgrounds/<%=camp._id%>/edit" class="card-link btn btn-primary">Edit</a>
-                        <form class="d-inline" action="/campgrounds/<%=camp._id%>?_method=DELETE" method="POST">
-                            <button class="btn btn-danger">Delete</button>
-                        </form>
-                    </div>
+                <% for(let img of camp.images){ %>
+                    <img src="<%=img.url%>" class="card-img-top" alt="">
                     <% } %>
+
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <%=camp.title%>
+                            </h5>
+                            <p class="card-text">
+                                <%= camp.description %>
+                            </p>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <%=camp.location %>
+                            </li>
+                            <li class="list-group-item">
+                                $<%=camp.price %>/night
+                            </li>
+                            <li class="list-group-item">
+                                Created by - <%=camp.author.username %>
+                            </li>
+                        </ul>
+                        <% if(currentUser && currentUser._id.equals(camp.author._id)){ %>
+                            <div class="card-body">
+                                <a href="/campgrounds/<%=camp._id%>/edit" class="card-link btn btn-primary">Edit</a>
+                                <form class="d-inline" action="/campgrounds/<%=camp._id%>?_method=DELETE" method="POST">
+                                    <button class="btn btn-danger">Delete</button>
+                                </form>
+                            </div>
+                            <% } %>
             </div>
         </div>
         <div class="col-6">
@@ -42,8 +45,8 @@
                         <label for="customRange1" class="form-label">Rating:</label>
                         <fieldset class="starability-basic">
                             <legend>First rating:</legend>
-                            <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked
-                                aria-label="No rating." />
+                            <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1"
+                                checked aria-label="No rating." />
                             <input type="radio" id="first-rate1" name="review[rating]" value="1" />
                             <label for="first-rate1" title="Terrible">1 star</label>
                             <input type="radio" id="first-rate2" name="review[rating]" value="2" />
