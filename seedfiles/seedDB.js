@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const campground = require('../models/campground.js')
-const cities = require('./cities.js')
+const cities= require('./canada_cities.js')
 const { descriptors, places } = require('./seedHelpers.js')
 
 
@@ -11,14 +11,13 @@ async function main() {
     console.log('Mongoose connection and seeding successful!')
 }
 
-
 // function for random array values 
 const arrayRand = array => array[Math.floor(Math.random() * array.length)];
 const seedDB = async () => {
     await campground.deleteMany();
     for (let i = 0; i < 50; i++) {
         const price = Math.floor(Math.random() * 30) + 10;
-        const random1000 = Math.floor(Math.random() * 1000);
+        const random1000 = Math.floor(Math.random() * 200);
         const camp = new campground({
             author: '68b0c6b7682cc7302f6eead8',
             location: `${cities[random1000].city} ${cities[random1000].state}`,
@@ -36,6 +35,10 @@ const seedDB = async () => {
                 }
 
             ],
+            geometry: {
+                type: "Point",
+                coordinates: [cities[random1000].longitude, cities[random1000].latitude] // [lng, lat]
+            },
             price
         })
         await camp.save()
