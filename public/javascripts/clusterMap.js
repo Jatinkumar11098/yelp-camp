@@ -1,16 +1,17 @@
+
 maptilersdk.config.apiKey = mapAPI;
 const map = new maptilersdk.Map({
     container: 'map',
     zoom: 2.5,
     center: campgrounds[0].geometry.coordinates,
-    style: maptilersdk.MapStyle.DATAVIZ.DARK
+    style: maptilersdk.MapStyle.DATAVIZ.LIGHT
 });
 
 map.on('load', function () {
     // add a clustered GeoJSON source for a sample set of earthquakes
     map.addSource('campgrounds', {
         'type': 'geojson',
-        'data': {features:campgrounds},
+        'data': { features: campgrounds },
         cluster: true,
         clusterMaxZoom: 14, // Max zoom to cluster points on
         clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
@@ -92,14 +93,8 @@ map.on('load', function () {
     // description HTML from its properties.
     map.on('click', 'unclustered-point', function (e) {
         const coordinates = e.features[0].geometry.coordinates.slice();
-        const mag = e.features[0].properties.mag;
-        let tsunami;
-
-        if (e.features[0].properties.tsunami === 1) {
-            tsunami = 'yes';
-        } else {
-            tsunami = 'no';
-        }
+        console.log(e.features);
+        const text = e.features[0].properties.popUpMarker;
 
         // Ensure that if the map is zoomed out such that
         // multiple copies of the feature are visible, the
@@ -111,7 +106,7 @@ map.on('load', function () {
         new maptilersdk.Popup()
             .setLngLat(coordinates)
             .setHTML(
-                'magnitude: ' + mag + '<br>Was there a tsunami?: ' + tsunami
+                text
             )
             .addTo(map);
     });
