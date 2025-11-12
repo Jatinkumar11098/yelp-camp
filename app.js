@@ -63,6 +63,10 @@ app.use((req, res, next) => {
     next();
 })
 
+app.get('/', (req,res)=>{
+    res.render('./campgrounds/landing');
+})
+
 // router middlewares
 app.use('/campgrounds', campgroundRoutes);
 app.use('/', userRoutes);
