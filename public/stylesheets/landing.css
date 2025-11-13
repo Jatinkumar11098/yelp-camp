@@ -1,0 +1,32 @@
+body {
+    height: 100vh;
+    margin: 0;
+    background:
+        linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+        url('./homeImg.jpg');
+    /* your background image */
+    background-size: cover;
+    /* cover full screen */
+    background-position: center;
+    /* center the image */
+    background-repeat: no-repeat;
+
+}
+
+main {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.navbar .nav-link {
+    color: rgba(255, 255, 255, 1);
+    border-bottom: 2px solid transparent;
+    transition: color 0.3s ease, border-bottom 0.3s ease;
+}
+
+.navbar .nav-link:hover {
+    color: rgba(255, 255, 255, 0.8);
+    border-bottom: 2px solid white;
+}
