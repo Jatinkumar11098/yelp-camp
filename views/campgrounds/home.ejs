@@ -1,7 +1,7 @@
 <%-layout('./layouts/boilerplate') %>
-    <h1>All Campgrounds</h1>
-    <div class="my-2"><a href="/campgrounds/new">add new campground</a></div>
-    <div  class='my-3' id="map" style="width: 100%; height: 400px;"></div>
+    <!-- <div class="my-2"><a href="/campgrounds/new">add new campground</a></div> -->
+    <div class='my-3' id="map" style="width: 100%; height: 400px;"></div>
+    <h1 class="font-weight-bold my-3">All Campgrounds</h1>
     <%for(let camp of campgrounds){ %>
         <div class="card mb-3">
             <div class="row">
@@ -29,6 +29,6 @@
         <% } %>
             <script>
                 const mapAPI = '<%-process.env.MAPTILER_API_KEY %>'
-                const campgrounds = <%-JSON.stringify(campgrounds)%>
+                const campgrounds = <%-JSON.stringify(campgrounds) %>
             </script>
             <script src="/javascripts/clusterMap.js"></script>
