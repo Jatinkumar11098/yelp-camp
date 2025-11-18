@@ -5,6 +5,16 @@ const User = require('./user');
 
 const opts = { toJSON: { virtuals: true } };
 const Schema = mongoose.Schema;
+
+const imageSchema = new Schema({
+    url: String,
+    filename: String
+});
+
+imageSchema.virtual('thumbnail').get(function () {
+    return this.url.replace('/upload', '/upload/w_200');
+});
+
 const campgroundSchema = new Schema({
     title: String,
     location: String,
@@ -20,12 +30,7 @@ const campgroundSchema = new Schema({
             required: true
         }
     },
-    images: [
-        {
-            url: String,
-            filename: String
-        }
-    ],
+    images: [imageSchema],
     price: Number,
     author: {
         type: Schema.Types.ObjectId,
@@ -40,7 +45,7 @@ const campgroundSchema = new Schema({
 
 }, opts);
 
-campgroundSchema.virtual('properties.popUpMarker').get(function(){
+campgroundSchema.virtual('properties.popUpMarker').get(function () {
     return `<strong><a href="/campgrounds/${this._id}">${this.title}</a></strong>`;
 })
 
