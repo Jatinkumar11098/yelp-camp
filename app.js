@@ -23,6 +23,7 @@ const reviewRoutes = require('./routes/reviews.js');
 const userRoutes = require('./routes/user.js');
 const passport = require('passport');
 const localStrategy = require('passport-local');
+const mongoSanitize = require('express-mongo-sanitize');
 
 
 
@@ -50,6 +51,9 @@ app.use(methodOverride('_method'));
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(mongoSanitize({
+    replaceWith: '_',
+  }));
 
 passport.use(new localStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
