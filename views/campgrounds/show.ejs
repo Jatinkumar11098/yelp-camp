@@ -1,9 +1,8 @@
 <%-layout('./layouts/boilerplate') %>
     <link rel="stylesheet" type="text/css" href="/stylesheets/stars.css" />
 
-    <div class="row">
-        <div class="col-6">
-            
+    <div class="row ">
+        <div class="col-md-6 mt-sm-4 shadow p-3 mb-5 bg-body-tertiary rounded"> 
             <div id="carouselExample" class="carousel slide">
                 <div class="carousel-inner">
                     <% camp.images.forEach((img,i)=> {%>
@@ -55,9 +54,10 @@
                     <% } %>
             </div>
         </div>
-        <div class="col-6">
-            <div id="map" class="my-2"></div>
-            <h2>Reviews: </h2>
+        <div class="col-md-6 mt-sm-4">
+            <div id="map" class="my- 2"></div>
+            <div class="bg-body-tertiary p-3">
+            <h2 class="heading my-3">Reviews: </h2>
             <% if(currentUser) {%>
                 <div class="reviews">
                     <form action="/campgrounds/<%=camp._id %>/reviews" method="POST" novalidate class="validate-form">
@@ -112,6 +112,7 @@
                             </div>
                             <% }%>
                     </div>
+        </div>
         </div>
     </div>
     <script>

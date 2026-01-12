@@ -5,6 +5,9 @@ maptilerClient.config.apiKey = process.env.MAPTILER_API_KEY;
 
 module.exports.index = async (req, res) => {
     const campgrounds = await Campground.find({});
+    for(let camp of campgrounds){
+        camp.shortDesc=camp.description.split(' ').slice(0, 13).join(' ');
+    }
     res.render('./campgrounds/home', { campgrounds });
 }
 

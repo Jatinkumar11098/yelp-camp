@@ -1,30 +1,31 @@
 <%-layout('./layouts/boilerplate') %>
     <!-- <div class="my-2"><a href="/campgrounds/new">add new campground</a></div> -->
     <div class='my-3' id="map" style="width: 100%; height: 400px;"></div>
+
     <h1 class="my-4 heading">All Campgrounds</h1>
     <%for(let camp of campgrounds){ %>
-        <div class="card mb-3">
+        <div class="card mb-3 shadow p-3 mb-5 bg-body-tertiary rounded">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-8 col-lg-4">
                     <img src="<%=camp.images[0].url %>" class="img-fluid" alt="">
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4 col-lg-6 d-flex justify-content-center align-items-center ">
                     <div class="card-body">
                         <h5 class="card-title">
                             <%=camp.title %>
                         </h5>
                         <p class="card-text">
-                            <%=camp.description %>
+                            <%=camp.shortDesc %>...
                         </p>
                         <p class="card-text">
                             <small class="text-muted">
                                 <%=camp.location %>
                             </small>
                         </p>
-                        <a href="/campgrounds/<%=camp._id%>" class="btn btn-info">View <%=camp.title %></a>
+                        <a href="/campgrounds/<%=camp._id%>" class="btn btn-primary custom" id="custom">View <%=camp.title %></a>
                     </div>
                 </div>
-            </div>
+            </div>         
         </div>
         <% } %>
             <script>
