@@ -1,4 +1,4 @@
-<%-layout('./layouts/boilerplate') %>
+<%-layout('. /layouts/boilerplate') %>
 
     <div class="row">
         <div class="col-md-6 offset-3">
@@ -6,10 +6,12 @@
                 <h4 class="alert-heading">
                     <%=err.message %>
                 </h4>
-                <p>
-                    <%=err.stack %>
-                </p>
-                <hr>
+                <% if(process.env.NODE_ENV !=='production' ){ %>
+                    <p>
+                        <%=err.stack %>
+                    </p>
+                    <% } %>
+                        <hr>
             </div>
         </div>
     </div>

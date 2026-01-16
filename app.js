@@ -24,22 +24,43 @@ const userRoutes = require('./routes/user.js');
 const passport = require('passport');
 const localStrategy = require('passport-local');
 const mongoSanitize = require('express-mongo-sanitize');
+const helmet = require('helmet');
+const { MongoStore } = require('connect-mongo');
 
+// const db_url = process.env.mongodb_url;
 
-
+// 'mongodb://127.0.0.1:27017/yelp-camp'
 
 app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'))
 
 
+// mongoose connection
+main().catch(err => console.log(err));
+async function main() {
+    await mongoose.connect('mongodb://127.0.0.1:27017/yelp-camp');
+    console.log('Mongoose connection successfull!!')
+}
+
+
+const store = MongoStore.create({
+    mongoUrl: 'mongodb://127.0.0.1:27017/yelp-camp',
+    touchAfter: 24 * 60 * 60,
+    crypto: {
+        secret: 'thisshouldbeabettersecret!'
+    }
+});
 const sessionConfig = {
+    store,
     secret: 'ThisIsNotAGoodSecret',
+    name: 'campsites',
     esave: false,
     saveUninitialized: true,
     resave: false,
     cookie: {
         httpOnly: true,
+        // secure:true,
         expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
         maxAge: 7 * 24 * 60 * 60 * 1000
     }
@@ -53,7 +74,73 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(mongoSanitize({
     replaceWith: '_',
-  }));
+}));
+
+
+app.use(helmet());
+const scriptSrcUrls = [
+    "https://stackpath.bootstrapcdn.com/",
+    // "https://api.tiles.mapbox.com/",
+    // "https://api.mapbox.com/",
+    "https://kit.fontawesome.com/",
+    "https://cdnjs.cloudflare.com/",
+    "https://cdn.jsdelivr.net",
+    "https://cdn.maptiler.com/", // add this
+];
+const styleSrcUrls = [
+    "https://kit-free.fontawesome.com/",
+    "https://stackpath.bootstrapcdn.com/",
+    // "https://api.mapbox.com/",
+    // "https://api.tiles.mapbox.com/",
+    "https://fonts.googleapis.com/",
+    "https://fonts.google.com/",
+    "https://use.fontawesome.com/",
+    "https://cdn.jsdelivr.net",
+    "https://cdn.maptiler.com/", // add this
+];
+const connectSrcUrls = [
+    // "https://api.mapbox.com/",
+    // "https://a.tiles.mapbox.com/",
+    // "https://b.tiles.mapbox.com/",
+    // "https://events.mapbox.com/",
+    "https://api.maptiler.com/", // add this
+];
+
+
+
+const fontSrcUrls = [];
+app.use(
+    helmet.contentSecurityPolicy({
+        directives: {
+            defaultSrc: [],
+            connectSrc: ["'self'", ...connectSrcUrls],
+            scriptSrc: ["'unsafe-inline'", "'self'", ...scriptSrcUrls],
+            styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
+            workerSrc: ["'self'", "blob:"],
+            objectSrc: [],
+            imgSrc: [
+                "'self'",
+                "blob:",
+                "data:",
+                "https://res.cloudinary.com/drwp4kmxm/",
+                "https://images.unsplash.com/",
+                "https://api.maptiler.com/"
+            ],
+            fontSrc: ["'self'", ...fontSrcUrls],
+        },
+    })
+);
+
+
+
+
+
+
+
+
+
+
+
 
 passport.use(new localStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
@@ -67,7 +154,7 @@ app.use((req, res, next) => {
     next();
 })
 
-app.get('/', (req,res)=>{
+app.get('/', (req, res) => {
     res.render('./campgrounds/landing');
 })
 
@@ -75,14 +162,6 @@ app.get('/', (req,res)=>{
 app.use('/campgrounds', campgroundRoutes);
 app.use('/', userRoutes);
 app.use('/campgrounds/:id/reviews', reviewRoutes);
-
-// mongoose connection
-main().catch(err => console.log(err));
-async function main() {
-    await mongoose.connect('mongodb://127.0.0.1:27017/yelp-camp');
-    console.log('Mongoose connection successfull!!')
-}
-
 
 app.all(/(.*)/, (req, res, next) => {
     next(new expressError('Page not found', 404));

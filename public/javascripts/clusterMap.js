@@ -35,7 +35,7 @@ map.on('load', function () {
                 6,
                 '#2AB6CB',
                 12,
-                '#04359F'
+                '#1b6fecff'
             ],
             'circle-radius': [
                 'step',
