@@ -26,8 +26,8 @@ const localStrategy = require('passport-local');
 const mongoSanitize = require('express-mongo-sanitize');
 const helmet = require('helmet');
 const { MongoStore } = require('connect-mongo');
-
-// const db_url = process.env.mongodb_url;
+const db_url = process.env.mongodb_url || 'mongodb://127.0.0.1:27017/yelp-camp';
+const secret = process.env.SECRET || 'thisshouldbeabettersecret!';
 
 // 'mongodb://127.0.0.1:27017/yelp-camp'
 
@@ -39,21 +39,21 @@ app.set('views', path.join(__dirname, 'views'))
 // mongoose connection
 main().catch(err => console.log(err));
 async function main() {
-    await mongoose.connect('mongodb://127.0.0.1:27017/yelp-camp');
+    await mongoose.connect(db_url);
     console.log('Mongoose connection successfull!!')
 }
 
 
 const store = MongoStore.create({
-    mongoUrl: 'mongodb://127.0.0.1:27017/yelp-camp',
+    mongoUrl: db_url,
     touchAfter: 24 * 60 * 60,
     crypto: {
-        secret: 'thisshouldbeabettersecret!'
+        secret
     }
 });
 const sessionConfig = {
     store,
-    secret: 'ThisIsNotAGoodSecret',
+    secret,
     name: 'campsites',
     esave: false,
     saveUninitialized: true,
